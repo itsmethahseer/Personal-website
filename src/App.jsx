@@ -8,6 +8,8 @@ import Typewriter from './components/Typewriter';
 import Preloader from './components/Preloader';
 import NoiseOverlay from './components/NoiseOverlay';
 import LocalTime from './components/LocalTime';
+import AmbientLight from './components/AmbientLight';
+import CircularProjects from './components/CircularProjects';
 import './App.css';
 import './components/Enhancements.css';
 
@@ -41,18 +43,12 @@ const SmoothScroll = ({ children }) => {
   return <>{children}</>;
 };
 
-// Ocean-like Spring Animations
 const fadeUp = {
   hidden: { opacity: 0, y: 100 },
   visible: { 
     opacity: 1, 
     y: 0, 
-    transition: { 
-      type: 'spring', 
-      damping: 40,     
-      stiffness: 40,   
-      mass: 2
-    } 
+    transition: { type: 'spring', damping: 40, stiffness: 40, mass: 2 } 
   },
 };
 
@@ -60,60 +56,8 @@ const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.3,
-      delayChildren: 0.1
-    },
+    transition: { staggerChildren: 0.3, delayChildren: 0.1 },
   },
-};
-
-const ProjectCard = ({ project }) => {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
-  
-  const y = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
-  const rotateX = useTransform(scrollYProgress, [0, 0.5, 1], [5, 0, -5]);
-
-  const handleMouseMove = (e) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    ref.current.style.setProperty('--mouse-x', `${x}px`);
-    ref.current.style.setProperty('--mouse-y', `${y}px`);
-  };
-
-  return (
-    <motion.div 
-      ref={ref} 
-      className={`project-card spotlight-card ${project.sizeClass || ''} interactive`} 
-      onMouseMove={handleMouseMove}
-      variants={fadeUp}
-      style={{ perspective: 1000 }}
-    >
-      <motion.div style={{ rotateX, width: '100%', height: '100%', transformStyle: 'preserve-3d' }}>
-        <div className="project-overlay"></div>
-        <motion.img 
-          style={{ y, scale: 1.25, width: '100%', height: '125%', objectFit: 'cover' }} 
-          src={project.img} 
-          alt={project.title} 
-          className="project-image" 
-        />
-        <div className="project-content">
-          {project.tags && (
-            <div className="project-tags">
-              {project.tags.map(t => <span key={t} className="project-tag">{t}</span>)}
-            </div>
-          )}
-          <h3 className="text-headline-md project-title" style={{ fontSize: project.titleSize }}>{project.title}</h3>
-          {project.desc && <p className="text-body-md project-desc" style={{ fontSize: project.descSize }}>{project.desc}</p>}
-        </div>
-      </motion.div>
-    </motion.div>
-  );
 };
 
 const TimelineCard = ({ experience }) => {
@@ -203,14 +147,12 @@ function App() {
   const projects = [
     {
       img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCrThMZrGJBUv8k4SCQ_Q2P1ezuztnZo83dsptChrYacrDLO9PwuS2SGOjAeR3Zm1ciKM2QVm6TWTrGR8j_AS6VASz6H-D4NMLu_A0OCLZ-E8Cg2O0_Ak_zZGyvICewrbvSEo_wr_A6XuFGeTVMMOab74YhXFGPWPBz_XxDmUiGM0P-OT8PxzbnHFp-zYljSeCZYOJ5Iz0uHSKsENFTL-FLLTWOiwhnEzWCnglTS3L8fG8x04UMJn97Jedoy5Hij5afKCsJgPsWMw",
-      sizeClass: "large",
       tags: ["CASE STUDY", "NEXT.JS"],
       title: "NEURAL ANALYTICA",
       desc: "Transforming complex AI data into intuitive, poetic visual narratives.",
     },
     {
       img: "https://lh3.googleusercontent.com/aida-public/AB6AXuA7RE8KrmvvfvjVzLoPWt_rnJT11bjDAwWJ3FFV77mX47n1R-NoRL0QXwiQSQJPuvG0ufhNOUIn8cvQA9AMuqFicUjUShsuwQrv7i5ds7qHuFM9Tk6l_qDKp_3t9atFxOtsTvlBUXOWANY-tEea-RKPLV3hLXu3Cnc2bz0tPLgUMruN6WmwXbc9qbhvLVjh9kNqV46oRseCB83HQipZT03xFcPs9LQK1uXzgrB9efgYJurX7O2xENQPskQEm6ajHvW_7cv9aG09eQ",
-      sizeClass: "medium",
       title: "VOID GALLERY",
       titleSize: "1.5rem",
       desc: "3D Interactive Art Portfolio",
@@ -260,25 +202,7 @@ function App() {
           <div className="app-wrapper" style={{ overflow: 'hidden' }}>
             <NoiseOverlay />
             <Cursor />
-            
-            <motion.div 
-              className="bg-gradient-spot spot-primary"
-              animate={{
-                x: ['-10%', '10%', '-5%', '-10%'],
-                y: ['-10%', '5%', '15%', '-10%'],
-                scale: [1, 1.2, 0.9, 1],
-              }}
-              transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.div 
-              className="bg-gradient-spot spot-secondary"
-              animate={{
-                x: ['10%', '-15%', '5%', '10%'],
-                y: ['10%', '20%', '-5%', '10%'],
-                scale: [1, 1.3, 0.8, 1],
-              }}
-              transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
-            />
+            <AmbientLight />
 
             <header className="header" style={{ background: 'rgba(255, 255, 255, 0.4)' }}>
               <nav className="container header-nav">
@@ -296,6 +220,7 @@ function App() {
             </header>
 
             <main>
+              {/* Hero Section */}
               <section className="section hero-section container">
                 <div className="hero-grid">
                   <motion.div 
@@ -362,6 +287,7 @@ function App() {
                 </motion.div>
               </section>
 
+              {/* Experience Section */}
               <section id="experience" className="section about-section">
                 <div className="container about-grid">
                   <div style={{ marginBottom: '32px' }}>
@@ -393,39 +319,10 @@ function App() {
                 </div>
               </section>
 
-              <section id="projects" className="section container">
-                <div className="projects-header">
-                  <div>
-                    <TextReveal text="Selected Works" className="text-headline-lg" style={{ marginBottom: '16px' }} />
-                    <motion.p 
-                      className="text-body-md" 
-                      style={{ color: 'var(--on-surface-variant)' }}
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      transition={{ delay: 0.3 }}
-                      viewport={{ once: true }}
-                    >
-                      A curated collection of digital artifacts and experiments.
-                    </motion.p>
-                  </div>
-                  <Magnetic>
-                    <button className="text-label-md text-primary interactive" style={{ background: 'none', border: 'none', borderBottom: '1px solid var(--primary)', cursor: 'pointer' }}>ALL PROJECTS</button>
-                  </Magnetic>
-                </div>
+              {/* Advanced 3D Circular Projects Section */}
+              <CircularProjects projects={projects} />
 
-                <motion.div 
-                  className="bento-grid"
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, margin: "-100px" }}
-                  variants={staggerContainer}
-                >
-                  {projects.map((proj, idx) => (
-                    <ProjectCard key={idx} project={proj} />
-                  ))}
-                </motion.div>
-              </section>
-
+              {/* Skills Section */}
               <section className="section skills-section">
                 <div className="container" style={{ position: 'relative' }}>
                   <div style={{ textAlign: 'center', maxWidth: '600px', margin: '0 auto' }}>
@@ -446,6 +343,7 @@ function App() {
                 </div>
               </section>
 
+              {/* Contact CTA */}
               <section id="contact" className="section container">
                 <motion.div 
                   className="contact-box glass-edge glow-indigo interactive"
