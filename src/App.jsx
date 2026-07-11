@@ -142,6 +142,174 @@ const SkillsShowcase = () => {
   );
 };
 
+const SplashSection = () => {
+  const name = "THAHSEER";
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start start', 'end start'],
+  });
+
+  const containerOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
+  const containerScale   = useTransform(scrollYProgress, [0, 0.75], [1, 0.9]);
+  const containerY       = useTransform(scrollYProgress, [0, 0.75], [0, -60]);
+  const hintOp           = useTransform(scrollYProgress, [0, 0.3],  [1, 0]);
+
+  const letterVariants = {
+    hidden: { opacity: 0, y: 80, rotateX: -90, filter: 'blur(12px)' },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      filter: 'blur(0px)',
+      transition: {
+        delay: 0.2 + i * 0.07,
+        type: 'spring',
+        damping: 14,
+        stiffness: 90,
+      },
+    }),
+  };
+
+  return (
+    <section ref={ref} style={{ height: '100vh', position: 'relative', zIndex: 5 }}>
+      <motion.div
+        style={{
+          position: 'sticky',
+          top: 0,
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          opacity: containerOpacity,
+          pointerEvents: 'none',
+          perspective: '1200px',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Animated glow orb behind name */}
+        <motion.div
+          style={{
+            position: 'absolute',
+            width: '70vw',
+            height: '50vh',
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, var(--primary) 0%, transparent 70%)',
+            filter: 'blur(90px)',
+            opacity: 0.12,
+            zIndex: 0,
+          }}
+          animate={{ scale: [1, 1.3, 1], opacity: [0.08, 0.18, 0.08] }}
+          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+        />
+
+        {/* Secondary accent orb */}
+        <motion.div
+          style={{
+            position: 'absolute',
+            width: '40vw',
+            height: '30vh',
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, #8b5cf6 0%, transparent 70%)',
+            filter: 'blur(80px)',
+            opacity: 0.08,
+            zIndex: 0,
+            transform: 'translateX(20vw) translateY(10vh)',
+          }}
+          animate={{ scale: [1.2, 1, 1.2], opacity: [0.05, 0.12, 0.05] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+        />
+
+        {/* Main name with letter-by-letter animation */}
+        <motion.div
+          style={{ y: containerY, scale: containerScale, position: 'relative', zIndex: 1 }}
+        >
+          <div style={{ display: 'flex', perspective: '1000px', transformStyle: 'preserve-3d' }}>
+            {name.split('').map((letter, i) => (
+              <motion.span
+                key={i}
+                custom={i}
+                variants={letterVariants}
+                initial="hidden"
+                animate="visible"
+                style={{
+                  display: 'inline-block',
+                  fontSize: 'clamp(3rem, 14vw, 13rem)',
+                  fontWeight: 900,
+                  letterSpacing: '-0.03em',
+                  lineHeight: 1,
+                  background: 'linear-gradient(160deg, var(--on-surface) 0%, var(--primary) 55%, #a78bfa 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  transformStyle: 'preserve-3d',
+                  userSelect: 'none',
+                }}
+              >
+                {letter}
+              </motion.span>
+            ))}
+          </div>
+
+          {/* Subtitle line — fades in after letters settle */}
+          <motion.p
+            initial={{ opacity: 0, y: 16, filter: 'blur(6px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ delay: 1.0, duration: 0.9, ease: 'easeOut' }}
+            style={{
+              textAlign: 'center',
+              fontSize: '0.9rem',
+              letterSpacing: '0.35em',
+              color: 'var(--on-surface-variant)',
+              fontFamily: 'var(--font-label)',
+              fontWeight: 500,
+              marginTop: '20px',
+            }}
+          >
+            AI ENGINEER · MALAPPURAM, INDIA
+          </motion.p>
+        </motion.div>
+
+        {/* Scroll hint — appears last, fades on scroll */}
+        <motion.div
+          style={{
+            opacity: hintOp,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '12px',
+            position: 'absolute',
+            bottom: '52px',
+          }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.6, duration: 1 }}
+        >
+          <p style={{
+            fontSize: '0.72rem',
+            letterSpacing: '0.28em',
+            color: 'var(--on-surface-variant)',
+            fontFamily: 'var(--font-label)',
+            fontWeight: 600,
+          }}>
+            SCROLL DOWN FOR DETAILS
+          </p>
+          <motion.div
+            style={{
+              width: '2px',
+              height: '48px',
+              background: 'linear-gradient(180deg, var(--primary), transparent)',
+            }}
+            animate={{ y: [0, 12, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        </motion.div>
+      </motion.div>
+    </section>
+  );
+};
+
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isAvailable, setIsAvailable] = useState(false);
@@ -192,8 +360,17 @@ function App() {
       titleSize: "1.25rem",
       desc: "Structured JSON extraction from invoices using GPT-4o, Gemini, AWS Textract & chain-of-thought prompting.",
       descSize: "0.875rem",
-    }
+    },
+    {
+      img: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&auto=format&fit=crop",
+      tags: ["LLAMA2", "LANGCHAIN", "RAG"],
+      title: "WHIZZ.AI",
+      titleSize: "1.5rem",
+      desc: "Document-based chat app using Llama2, OpenAI, LangChain, FAISS, Whisper & ChromaDB with RAG prompting for Q&A over uploaded datasets.",
+      descSize: "0.875rem",
+    },
   ];
+
 
   const experiences = [
     {
@@ -245,7 +422,7 @@ function App() {
 
             <header className="header" style={{ background: 'rgba(255, 255, 255, 0.4)' }}>
               <nav className="container header-nav">
-                <a href="#" className="nav-logo interactive">THAHSEER.AI</a>
+                <a href="#" className="nav-logo interactive">THAHSEER</a>
                 <div className="nav-links">
                   <a href="#experience" className="nav-link active interactive">Experience</a>
                   <a href="#projects" className="nav-link interactive">Projects</a>
@@ -259,6 +436,8 @@ function App() {
             </header>
 
             <main>
+              <SplashSection />
+
               {/* Hero Section */}
               <section className="section hero-section container">
                 <div className="hero-grid">
@@ -389,7 +568,7 @@ function App() {
               <section className="section skills-section">
                 <div className="container" style={{ position: 'relative' }}>
                   <div style={{ textAlign: 'center', maxWidth: '600px', margin: '0 auto' }}>
-                    <TextReveal text="The Arsenal" className="text-headline-lg" style={{ marginBottom: '16px', justifyContent: 'center' }} />
+                    <TextReveal text="Tech DNA" className="text-headline-lg" style={{ marginBottom: '16px', justifyContent: 'center' }} />
                     <motion.p 
                       className="text-body-lg" 
                       style={{ color: 'var(--on-surface-variant)' }}
@@ -439,7 +618,7 @@ function App() {
             <footer className="footer">
               <div className="container footer-content">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'flex-start' }}>
-                  <span className="text-headline-md" style={{ fontSize: '1.5rem' }}>THAHSEER.AI</span>
+                  <span className="text-headline-md" style={{ fontSize: '1.5rem' }}>Thank You for reaching out</span>
                   <p className="text-body-md" style={{ fontSize: '0.875rem', color: 'var(--on-surface-variant)' }}>© 2025 Muhammed Thahseer. AI Engineer · Malappuram, Kerala, India.</p>
                   <LocalTime />
                 </div>
