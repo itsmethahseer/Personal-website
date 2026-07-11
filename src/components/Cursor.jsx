@@ -1,7 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 
+// Detect touch-only devices (phones, tablets) — no mouse, so no custom cursor needed
+const isTouchDevice = () =>
+  window.matchMedia('(pointer: coarse)').matches;
+
 const Cursor = () => {
   const canvasRef = useRef(null);
+
+  // Don't render cursor on touch devices
+  if (isTouchDevice()) return null;
 
   useEffect(() => {
     const canvas = canvasRef.current;
