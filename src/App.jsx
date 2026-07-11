@@ -12,6 +12,7 @@ import AmbientLight from './components/AmbientLight';
 import CircularProjects from './components/CircularProjects';
 import './App.css';
 import './components/Enhancements.css';
+import portrait from './assets/IMG_5069.jpeg';
 
 // Custom Smooth Scroll Wrapper using core Lenis
 const SmoothScroll = ({ children }) => {
@@ -90,12 +91,12 @@ const TimelineCard = ({ experience }) => {
 const SkillsShowcase = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const skills = [
-    { name: 'FRONTEND', desc: 'React, Next.js, TypeScript', icon: 'code', color: 'var(--primary)' },
-    { name: 'STYLING', desc: 'Tailwind CSS, Vanilla SCSS', icon: 'layers', color: 'var(--secondary)' },
-    { name: 'GRAPHICS', desc: 'Three.js, WebGL, GLSL', icon: 'view_in_ar', color: 'var(--tertiary)' },
-    { name: 'MOTION', desc: 'Framer Motion, GSAP', icon: 'motion_photos_on', color: 'var(--primary)' },
-    { name: 'BACKEND', desc: 'Node.js, PostgreSQL, Redis', icon: 'database', color: '#0055ff' },
-    { name: 'DESIGN', desc: 'Figma, Blender 3D', icon: 'design_services', color: '#e31754' },
+    { name: 'AGENTIC AI', desc: 'LangChain, LangGraph, Strands', icon: 'smart_toy', color: 'var(--primary)' },
+    { name: 'LLMs & RAG', desc: 'OpenAI, Claude, Llama2, FAISS, Chroma', icon: 'psychology', color: 'var(--secondary)' },
+    { name: 'COMPUTER VISION', desc: 'YOLO, PaddleOCR, Donut, OpenCV', icon: 'remove_red_eye', color: 'var(--tertiary)' },
+    { name: 'DEPLOYMENT', desc: 'FastAPI, Docker, AWS, Azure', icon: 'cloud', color: '#0055ff' },
+    { name: 'NLP & SPEECH', desc: 'Whisper, Gliner, NER, ElevenLabs', icon: 'record_voice_over', color: '#e31754' },
+    { name: 'DATA & ML', desc: 'PyTorch, TensorFlow, Scikit-learn, Pandas', icon: 'analytics', color: 'var(--primary)' },
   ];
 
   useEffect(() => {
@@ -143,51 +144,89 @@ const SkillsShowcase = () => {
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isAvailable, setIsAvailable] = useState(false);
+
+  useEffect(() => {
+    const checkAvailability = () => {
+      // IST = UTC+5:30
+      const now = new Date();
+      const istOffset = 5.5 * 60; // minutes
+      const utcMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
+      const istMinutes = (utcMinutes + istOffset) % (24 * 60);
+      const istHour = istMinutes / 60;
+      setIsAvailable(istHour >= 10 && istHour < 19); // 10AM to 7PM IST
+    };
+    checkAvailability();
+    const timer = setInterval(checkAvailability, 60000); // check every minute
+    return () => clearInterval(timer);
+  }, []);
+
 
   const projects = [
     {
-      img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCrThMZrGJBUv8k4SCQ_Q2P1ezuztnZo83dsptChrYacrDLO9PwuS2SGOjAeR3Zm1ciKM2QVm6TWTrGR8j_AS6VASz6H-D4NMLu_A0OCLZ-E8Cg2O0_Ak_zZGyvICewrbvSEo_wr_A6XuFGeTVMMOab74YhXFGPWPBz_XxDmUiGM0P-OT8PxzbnHFp-zYljSeCZYOJ5Iz0uHSKsENFTL-FLLTWOiwhnEzWCnglTS3L8fG8x04UMJn97Jedoy5Hij5afKCsJgPsWMw",
-      tags: ["CASE STUDY", "NEXT.JS"],
-      title: "NEURAL ANALYTICA",
-      desc: "Transforming complex AI data into intuitive, poetic visual narratives.",
+      img: "https://images.unsplash.com/photo-1655720828018-edd2daec9349?w=800&auto=format&fit=crop",
+      tags: ["FASTAPI", "LLMs", "SPEECH-TO-TEXT"],
+      title: "MEETING NOTETAKER",
+      desc: "AI-powered meeting notetaker (Vica) with automated transcription, summarization, and action item extraction using Playwright & Rust APIs.",
     },
     {
-      img: "https://lh3.googleusercontent.com/aida-public/AB6AXuA7RE8KrmvvfvjVzLoPWt_rnJT11bjDAwWJ3FFV77mX47n1R-NoRL0QXwiQSQJPuvG0ufhNOUIn8cvQA9AMuqFicUjUShsuwQrv7i5ds7qHuFM9Tk6l_qDKp_3t9atFxOtsTvlBUXOWANY-tEea-RKPLV3hLXu3Cnc2bz0tPLgUMruN6WmwXbc9qbhvLVjh9kNqV46oRseCB83HQipZT03xFcPs9LQK1uXzgrB9efgYJurX7O2xENQPskQEm6ajHvW_7cv9aG09eQ",
-      title: "VOID GALLERY",
-      titleSize: "1.5rem",
-      desc: "3D Interactive Art Portfolio",
+      img: "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&auto=format&fit=crop",
+      tags: ["STRANDS", "AWS BEDROCK", "ELEVENLABS"],
+      title: "INSURANCE ELIGIBILITY AI",
+      titleSize: "1.25rem",
+      desc: "Agentic AI voice automation for insurance eligibility with multi-step reasoning using Strands, Bedrock & AWS Connect.",
       descSize: "0.875rem",
     },
     {
-      img: "https://lh3.googleusercontent.com/aida-public/AB6AXuD4C9RWy7b91XGTJMcrM0mDxY00H8v8dPyElgzKeSjMLeTYPWie16xljBNM1vxtIp9DGBVVBtEWRLCg7ZuRjAjBFrK0MC3EuiBseQ_4XHL--SfInI7ddaCjI08vvyokf9JvGOdiiiLC4Afk8HSXn_f41dkVG9hvC-POueAxdJU2qLESeyKdGKBClmfVqZcl8QuwLY2_vPPxHYHY6I2_1uCwerB2iPIKqAneliUdEsqDLQBgvhOYMZ30w51ojW4NhtgNef22_uUwyg",
-      title: "COUTURE OS",
-      titleSize: "1.25rem",
+      img: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&auto=format&fit=crop",
+      tags: ["LANGGRAPH", "CLAUDE 3", "DOCKER"],
+      title: "CHAT PLUGIN",
+      titleSize: "1.5rem",
+      desc: "AI chat plugin for patient management enabling doctors to navigate via natural language queries.",
+      descSize: "0.875rem",
     },
     {
-      img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCBorEGoTmRgCpImrRB0A77hgBhKONmBYReCwOC1pERsVcpvgvAKa9zEmqXUJdb3tM71CYoCrQNucJq3w1F1zuBsc3lFyr5zWTaO_Xglmt5d9ibqlYSp3dpl6JYgZart8YCCsk1k6H1KIDVbigP2eg1-sc82KJ5via1m_dvMOeGBJMSkf3dfpNUuac8PNdLp-ToAS6q6XH1sEaZ8BYYicSjtTDRllDZ-u7GIP8a53ohL25VwbdwK5D7YVPZ8qDTJ8op1F1kp43hdA",
-      title: "QUANTUM CORE",
+      img: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&auto=format&fit=crop",
+      tags: ["GPT-4", "FASTAPI", "OCR"],
+      title: "INVOICE PARSER",
       titleSize: "1.25rem",
+      desc: "Structured JSON extraction from invoices using GPT-4o, Gemini, AWS Textract & chain-of-thought prompting.",
+      descSize: "0.875rem",
     }
   ];
 
   const experiences = [
     {
       active: true,
-      date: "2021 — PRESENT",
-      role: "Lead Frontend Architect",
-      desc: "Directing technical strategy for high-end boutique agencies. Focused on performance optimization and modular design systems using Next.js and Three.js."
+      date: "OCT 2025 — PRESENT",
+      role: "AI Engineer · Equipo Health",
+      desc: "Built an AI chat plugin using LangGraph & Claude 3 for patient management. Developed an Automatic AI calling system for insurance eligibility checks. Built multi-agent systems with Strands & Bedrock for real-time collaboration.",
+      icon: "work"
     },
     {
       active: false,
-      date: "2018 — 2021",
-      role: "Senior Creative Developer",
-      desc: "Developed award-winning interactive marketing campaigns for global brands. Mastered WebGL, GLSL shaders, and sophisticated CSS animations."
+      date: "APR 2024 — JUN 2025",
+      role: "AI Developer · Pixl.ai",
+      desc: "Built computer vision pipelines with YOLO, PaddleOCR & Donut. Fine-tuned LLMs (Llama2, TinyLlama) for chatbots. Worked with Gliner for NER and built a meeting-scheduling chatbot assistant."
     },
     {
       active: false,
-      date: "2015 — 2018",
-      role: "B.Sc. in Computer Science",
-      desc: "Specialized in Graphics Engineering and UI/UX Principles. Graduated with Honors from the Royal Institute of Technology."
+      date: "NOV 2023 — APR 2024",
+      role: "AI/ML Trainee · Cubet Technolabs",
+      desc: "Worked on LLM-powered document-based Q&A application. Implemented audio recognition with Whisper. Used FAISS, OpenAI, Llama2, LangChain & FastAPI for deployment."
+    },
+    {
+      active: false,
+      date: "NOV 2023 — APR 2024",
+      role: "AI/ML Trainee · Brototype",
+      desc: "Worked on classification, regression & deep learning. Developed self-projects in image captioning & next-word prediction. Performed EDA on various datasets."
+    },
+    {
+      active: false,
+      date: "JUN 2019 — MAR 2023",
+      role: "BSc Mathematics · Calicut University",
+      desc: "Bachelor of Science in Mathematics from Calicut University. Built a strong foundation in statistical analysis, quantitative reasoning, and data structures — the base of my AI/ML journey.",
+      icon: "school"
     }
   ];
 
@@ -206,15 +245,15 @@ function App() {
 
             <header className="header" style={{ background: 'rgba(255, 255, 255, 0.4)' }}>
               <nav className="container header-nav">
-                <a href="#" className="nav-logo interactive">CREATIVE.LAB</a>
+                <a href="#" className="nav-logo interactive">THAHSEER.AI</a>
                 <div className="nav-links">
                   <a href="#experience" className="nav-link active interactive">Experience</a>
                   <a href="#projects" className="nav-link interactive">Projects</a>
-                  <a href="#about" className="nav-link interactive">About</a>
+                  <a href="#experience" className="nav-link interactive">About</a>
                   <a href="#contact" className="nav-link interactive">Contact</a>
                 </div>
                 <Magnetic>
-                  <button className="btn-primary interactive">Get in Touch</button>
+                  <a href="#contact" className="btn-primary interactive" style={{ textDecoration: 'none' }}>Get in Touch</a>
                 </Magnetic>
               </nav>
             </header>
@@ -230,25 +269,49 @@ function App() {
                     viewport={{ once: true }}
                     variants={staggerContainer}
                   >
-                    <motion.div variants={fadeUp} className="status-badge glass">
-                      AVAILABLE FOR FREELANCE
+                    <motion.div
+                      variants={fadeUp}
+                      className="status-badge glass"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
+                        borderColor: isAvailable ? 'rgba(0,200,100,0.3)' : 'rgba(220,50,50,0.3)',
+                        background: isAvailable ? 'rgba(0,200,100,0.08)' : 'rgba(220,50,50,0.08)'
+                      }}
+                    >
+                      <span style={{
+                        width: '8px',
+                        height: '8px',
+                        borderRadius: '50%',
+                        backgroundColor: isAvailable ? '#00c864' : '#e03030',
+                        boxShadow: isAvailable ? '0 0 8px #00c864' : '0 0 8px #e03030',
+                        animation: isAvailable ? 'pulse-dot 2s infinite' : 'none',
+                        flexShrink: 0,
+                      }} />
+                      <span>
+                        {isAvailable
+                          ? 'AVAILABLE FOR FREELANCE · 10AM – 7PM IST'
+                          : 'UNAVAILABLE NOW · OPEN 10AM – 7PM IST'
+                        }
+                      </span>
                     </motion.div>
                     
                     <motion.div variants={fadeUp} className="text-display-lg" style={{ lineHeight: 1.1 }}>
-                      Engineering <br/>
+                      Building <br/>
                       <Typewriter 
-                        phrases={['Poetic', 'Intelligent', 'Immersive', 'State-of-the-art']} 
+                        phrases={['Agentic AI', 'LLM Systems', 'RAG Pipelines', 'AI Automation','Classical ML','Data Engineering','Production-Ready AI']} 
                         className="italic text-primary" 
                       /> <br/>
-                      Digital Experiences
+                      for the Real World
                     </motion.div>
 
                     <motion.p variants={fadeUp} className="text-body-lg" style={{ color: 'var(--on-surface-variant)', maxWidth: '500px' }}>
-                      A Senior Creative Developer focused on building high-end interfaces that merge technical mastery with visual storytelling.
+                      AI Engineer with 3 years of experience building LLM-powered applications, agentic AI systems, and computer vision pipelines. Skilled in RAG, vector databases, and deploying ML models with FastAPI & Docker on cloud platforms.
                     </motion.p>
                     <motion.div variants={fadeUp} className="hero-actions">
-                      <Magnetic><button className="btn-primary interactive">View Showcase</button></Magnetic>
-                      <Magnetic><button className="btn-outline interactive glass">About Me</button></Magnetic>
+                      <Magnetic><a href="#experience" className="btn-primary interactive" style={{ textDecoration: 'none' }}>View Showcase</a></Magnetic>
+                      <Magnetic><a href="#experience" className="btn-outline interactive glass" style={{ textDecoration: 'none' }}>About Me</a></Magnetic>
                     </motion.div>
                   </motion.div>
                   
@@ -260,13 +323,13 @@ function App() {
                     whileHover={{ y: -10, transition: { type: 'spring', stiffness: 200 } }}
                   >
                     <img 
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCt9O8vPn7-mLo7YHFXHpvxyeV_35j3IT4wxpN8VlWZ2_8C-0B4nVJVMBj4wta6UNoxS_NkSs9un3pmSI-Vdft2x-0yoOgF6zP9JXNoYTJNYpzuBwEZ1ks1rQnnjOYBLpS0Szp97mO6czQVty2bBwJRE4_ehhDhreu-IzlEBdIdsx-e-HUbKVwosN_AYsuHAM7I2ihVEDQxBkrEPBv32ZqbzqVYcWWoggKqTjP-5rgkULe4SaMzDEFYwLWx0hlw3tsscnUIURee9w" 
+                      src={portrait} 
                       alt="Portrait" 
                       className="hero-image"
                     />
                     <div className="hero-quote glass interactive">
                       <p className="text-headline-md" style={{ fontSize: '1.25rem', fontStyle: 'italic' }}>
-                        "Simplicity is the ultimate sophistication."
+                        "AI is not magic — it's engineering."
                       </p>
                     </div>
                   </motion.div>
@@ -300,7 +363,7 @@ function App() {
                       transition={{ delay: 0.3 }}
                       viewport={{ once: true }}
                     >
-                      With over a decade of experience, I've bridged the gap between complex engineering and aesthetic design. My journey began in fine arts and evolved into the digital realm where I now craft high-performance web applications.
+                      AI Engineer with 3 years of hands-on experience across LLM applications, agentic systems, and computer vision. From document Q&A to voice AI automation — I build systems that actually work in production.
                     </motion.p>
                   </div>
 
@@ -335,7 +398,7 @@ function App() {
                       transition={{ delay: 0.3 }}
                       viewport={{ once: true }}
                     >
-                      Modern tools for building the next generation of the web.
+                      A full stack of AI capabilities — from model training to cloud deployment.
                     </motion.p>
                   </div>
 
@@ -354,17 +417,20 @@ function App() {
                 >
                   <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0, 65, 200, 0.05)', zIndex: 0 }}></div>
                   <TextReveal 
-                    text="Let's build something extraordinary together." 
+                    text="Let's build something intelligent together." 
                     className="text-display-lg" 
                     style={{ position: 'relative', zIndex: 10, marginBottom: '32px', justifyContent: 'center', textAlign: 'center' }} 
                   />
                   
-                  <p className="text-body-lg" style={{ position: 'relative', zIndex: 10, color: 'var(--on-surface-variant)', maxWidth: '600px', margin: '0 auto 48px' }}>
-                    Ready to elevate your digital presence? Whether it's a high-end application or a creative experiment, I'm here to bring it to life.
+                  <p className="text-body-lg" style={{ position: 'relative', zIndex: 10, color: 'var(--on-surface-variant)', maxWidth: '600px', margin: '0 auto 16px' }}>
+                    Have an AI project in mind? From LLM-powered apps to agentic systems — I'm available for freelance work. Let's connect.
+                  </p>
+                  <p className="text-body-lg" style={{ position: 'relative', zIndex: 10, color: 'var(--on-surface-variant)', maxWidth: '600px', margin: '0 auto 48px', opacity: 0.7 }}>
+                    📧 zacthahseer123@gmail.com &nbsp;|&nbsp; 📞 +91 7592072319
                   </p>
                   <div style={{ position: 'relative', zIndex: 10, display: 'flex', gap: '24px', flexWrap: 'wrap', justifyContent: 'center' }}>
-                    <Magnetic><button className="btn-primary interactive" style={{ padding: '20px 48px' }}>Drop an Email</button></Magnetic>
-                    <Magnetic><button className="btn-outline interactive glass" style={{ padding: '20px 48px' }}>Book a Call</button></Magnetic>
+                    <Magnetic><a href="mailto:zacthahseer123@gmail.com" className="btn-primary interactive" style={{ padding: '20px 48px', textDecoration: 'none' }}>Send an Email</a></Magnetic>
+                    <Magnetic><a href="https://wa.me/917592072319" target="_blank" rel="noreferrer" className="btn-outline interactive glass" style={{ padding: '20px 48px', textDecoration: 'none' }}>WhatsApp Me</a></Magnetic>
                   </div>
                 </motion.div>
               </section>
@@ -373,15 +439,15 @@ function App() {
             <footer className="footer">
               <div className="container footer-content">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'flex-start' }}>
-                  <span className="text-headline-md" style={{ fontSize: '1.5rem' }}>CREATIVE.LAB</span>
-                  <p className="text-body-md" style={{ fontSize: '0.875rem', color: 'var(--on-surface-variant)' }}>© 2024 Creative Lab. Engineered for excellence.</p>
+                  <span className="text-headline-md" style={{ fontSize: '1.5rem' }}>THAHSEER.AI</span>
+                  <p className="text-body-md" style={{ fontSize: '0.875rem', color: 'var(--on-surface-variant)' }}>© 2025 Muhammed Thahseer. AI Engineer · Malappuram, Kerala, India.</p>
                   <LocalTime />
                 </div>
                 <div className="footer-links">
-                  <a href="#" className="nav-link interactive">LinkedIn</a>
-                  <a href="#" className="nav-link interactive">GitHub</a>
-                  <a href="#" className="nav-link interactive">Dribbble</a>
-                  <a href="#" className="nav-link interactive">Twitter</a>
+                  <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="nav-link interactive">LinkedIn</a>
+                  <a href="https://github.com" target="_blank" rel="noreferrer" className="nav-link interactive">GitHub</a>
+                  <a href="mailto:zacthahseer123@gmail.com" className="nav-link interactive">Email</a>
+                  <a href="tel:+917592072319" className="nav-link interactive">Phone</a>
                 </div>
               </div>
             </footer>

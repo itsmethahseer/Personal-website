@@ -98,7 +98,8 @@
 }
 
 .status-badge {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   padding: 6px 16px;
   border-radius: 9999px;
   color: var(--primary);
@@ -107,6 +108,11 @@
   font-size: 0.875rem;
   font-weight: 600;
   align-self: flex-start;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.4); }
 }
 
 .hero-actions {
