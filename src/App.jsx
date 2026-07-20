@@ -10,6 +10,7 @@ import NoiseOverlay from './components/NoiseOverlay';
 import LocalTime from './components/LocalTime';
 import AmbientLight from './components/AmbientLight';
 import CircularProjects from './components/CircularProjects';
+import SkillMatcher from './components/SkillMatcher';
 import './App.css';
 import './components/Enhancements.css';
 import portrait from './assets/IMG_5069.jpeg';
@@ -490,6 +491,7 @@ function App() {
                     </motion.p>
                     <motion.div variants={fadeUp} className="hero-actions">
                       <Magnetic><a href="#experience" className="btn-primary interactive" style={{ textDecoration: 'none' }}>View Showcase</a></Magnetic>
+                      <Magnetic><a href="/resume.pdf" download="Resume.pdf" className="btn-outline interactive glass" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>Download Resume</a></Magnetic>
                       <Magnetic><a href="#experience" className="btn-outline interactive glass" style={{ textDecoration: 'none' }}>About Me</a></Magnetic>
                     </motion.div>
                   </motion.div>
@@ -582,6 +584,7 @@ function App() {
                   </div>
 
                   <SkillsShowcase />
+                  <SkillMatcher />
                 </div>
               </section>
 
